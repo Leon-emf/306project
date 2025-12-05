@@ -8,7 +8,7 @@ Ce dossier contient l’ensemble des documents produits dans le cadre du **modul
 
 ### **1. Business Case**
 
-Document présentant le contexte initial, les besoins du client, les objectifs du projet et sa justification.
+Document présentant le contexte initial, les besoins du client, les objectifs du projet et sa justification.....
 
 ### **2. Cahier des charges**
 
