@@ -1,38 +1,39 @@
-# SCRUM : Daily scrum du ... 2025
- 
+# SCRUM : Daily Scrum du ... 2025
+
 ## Ce qui a été fait ce matin
- 
-### Leon
-- kickOff
-- Aide product backlog
+
+### Léon
+- Kick-off
+- Aide au product backlog
 - Modification du planning
- 
+
 ### Lorenzo
-- kickOff
-- fini la création de la page utilisateur
- 
+- Kick-off
+- Finalisation de la création de la page utilisateur
+
 ### Jules
-- kickOff
-- Relecture du cahier des charges ainsi qu du business case.
-- Product backlog 
+- Kick-off
+- Relecture du cahier des charges et du business case
+- Product backlog
 
 ### Problèmes rencontrés
-- 
+- Aucun signalé ce matin
 
 ## Ce qui a été fait cet après-midi
-### Leon
-- 
-- 
- 
+
+### Léon
+- Prise en main de la manette
+- Modification du planning
+
 ### Lorenzo
--
--
- 
+- Prise en main du robot
+- Modification de la vue utilisateur
+
 ### Jules
-- 
-- 
+- Aide à la prise en main de la manette
+- Avancée de la documentation de projet
 
 ### Problèmes rencontrés
-- 
+- Problème de JDK et de librairie pour Lorenzo
 
  
