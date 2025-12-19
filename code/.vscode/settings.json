@@ -1,11 +1,73 @@
 {
-    "java.project.sourcePaths": ["src"],
-    "java.project.outputPath": "bin",
-    "java.project.referencedLibraries": {
-        "include": [
-            "lib/**/*.jar"
-        ],
-        "exclude": [
-        ]
-    }
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-17",
+            "path": "C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.7.7-hotspot",
+            "default": true
+        }
+    ],
+    "java.jdt.ls.java.home": "C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.7.7-hotspot",
+    "java.project.referencedLibraries": [
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.swing.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\jackson-core-2.7.3.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\jackson-annotations-2.7.0.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\dronecontroller-0.2.0.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\log4j-api-2.5.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\log4j-slf4j-impl-2.5.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.graphics.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\log4j-core-2.5.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\dronecontroller-0.2.0-javadoc.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\ControllerXbox\\ControllerXbox.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx-swt.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\jackson-databind-2.7.3.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.media.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\jaw.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.controls.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.base.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.web.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\slf4j-api-1.7.19.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\libfx\\openjfx_17_0_8_windows_x64\\lib\\javafx.fxml.jar",
+        "c:\\Users\\fejzajl\\OneDrive - EDUETATFR\\011.EMF (EXERCICE)\\3eme annee (2025-2026)\\306\\306-G3-SpeleoThink\\code\\src\\3-ControllerXbox\\lib\\XboxController.jar",
+        "code/lib/API_Robot7Links_HSR1_HSR2.jar",
+        "code/lib/dronecontroller-0.2.0.jar",
+        "code/lib/dronecontroller-0.2.0-javadoc.jar",
+        "code/lib/dronecontroller-0.2.0-sources.jar",
+        "code/lib/gson-2.8.5.jar",
+        "code/lib/gson-2.8.5-javadoc.jar",
+        "code/lib/gson-2.8.5-sources.jar",
+        "code/lib/jackson-annotations-2.7.0.jar",
+        "code/lib/jackson-core-2.7.3.jar",
+        "code/lib/jackson-databind-2.7.3.jar",
+        "code/lib/jaw.jar",
+        "code/lib/log4j-api-2.5.jar",
+        "code/lib/log4j-core-2.5.jar",
+        "code/lib/log4j-slf4j-impl-2.5.jar",
+        "code/lib/slf4j-api-1.7.19.jar",
+        "code/lib/voicerss_tts.jar",
+        "code/lib/XboxController.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.base.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.controls.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.fxml.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.graphics.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.media.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.swing.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx.web.jar",
+        "code/lib/openjfx_17_0_8_windows_x64/lib/javafx-swt.jar",
+        "lib/API_Robot7Links_HSR1_HSR2.jar",
+        "lib/gson-2.8.5.jar",
+        "lib/gson-2.8.5-javadoc.jar",
+        "lib/gson-2.8.5-sources.jar",
+        "lib/voicerss_tts.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.base.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.controls.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.fxml.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.graphics.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.media.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.swing.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx.web.jar",
+        "lib/openjfx_17_0_8_windows_x64/lib/javafx-swt.jar"
+    ],
+    "java.project.sourcePaths": [
+        ""
+    ]
 }

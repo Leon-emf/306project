@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Launch JavaFX Application",
+            "request": "launch",
+            "mainClass": "API_Robot7Links_Test",
+            "vmArgs": "--module-path \"C:/Users/maglianil/OneDrive - EDUETATFR/Bureau/EMF/Documents EMF/Syntheses EMF/306/MVC_FXML_D400_JDK17LTS/lib/openjfx_17_0_8_windows_x64/lib\" --add-modules javafx.controls,javafx.fxml"
+        },
+    ]
+}
