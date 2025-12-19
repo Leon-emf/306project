@@ -20,18 +20,15 @@
 ## Ce qui a été fait cet après-midi
  
 ### Leon
- 
--
+- intégration de la manette dans le projet
  
 ### Lorenzo
- 
--
+- aide dans l'implémentation de la manette 
+
  
 ### Jules
- 
--
+- réalisation des maquettes
 
 ## Problèmes rencontrés
- 
--
+- Quelque probleme de WI-Fi et sur les chemins des fichiers
  
