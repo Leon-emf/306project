@@ -7,7 +7,9 @@ package ctrl;
 
 import wrk.WrkEtatRobot;
 import wrk.WrkAudio;
+import wrk.WrkXboxController;
 import bean.MyRobot;
+import bean.XboxButton;
 import ch.emf.info.robot.links.Robot;
 import ch.emf.info.robot.links.exception.UnreachableRobotException;
 import ch.emf.info.robot.links.bean.RobotState;
@@ -28,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -39,7 +42,7 @@ import javafx.stage.WindowEvent;
  *
  * @author AudergonV01
  */
-public class MainViewController implements Initializable, ICtrlEtatRobot, Ctrl {
+public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlXboxInput, Ctrl {
 
     @FXML
     private TextField txtIp1;
@@ -68,7 +71,10 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, Ctrl {
     private MyRobot myRobot;
     private WrkAudio wrkAudio;
     private WrkEtatRobot wrkEtatRobot;
+    private WrkXboxController wrkXboxController;
     private static final int STICK_MULTIPLIER = 200;
+    private static final int MAX_SPEED = 999;
+    private boolean xboxControlEnabled = false;
 
     private ToggleButton btnJoystick;
     @FXML
@@ -83,6 +89,38 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, Ctrl {
         wrkEtatRobot.start();
         wrkAudio = new WrkAudio();
         myRobot = new MyRobot();
+        
+        // Initialize Xbox controller support
+        wrkXboxController = new WrkXboxController(this);
+        wrkXboxController.start();
+        
+        // Setup keyboard input for testing (when no physical Xbox controller)
+        setupKeyboardInput();
+    }
+    
+    /**
+     * Setup keyboard input as fallback for Xbox controller testing
+     */
+    private void setupKeyboardInput() {
+        // This will be called when the scene is available
+        Platform.runLater(() -> {
+            if (boxCommands.getScene() != null) {
+                boxCommands.getScene().setOnKeyPressed(this::handleKeyPressed);
+                boxCommands.getScene().setOnKeyReleased(this::handleKeyReleased);
+            }
+        });
+    }
+    
+    private void handleKeyPressed(KeyEvent event) {
+        if (wrkXboxController != null) {
+            wrkXboxController.updateFromKeyboard(event, true);
+        }
+    }
+    
+    private void handleKeyReleased(KeyEvent event) {
+        if (wrkXboxController != null) {
+            wrkXboxController.updateFromKeyboard(event, false);
+        }
     }
 
     @FXML
@@ -251,8 +289,14 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, Ctrl {
     private void close(Event event) {
         ((Stage) (btnOnOff.getScene().getWindow())).close();
         wrkEtatRobot.setRunning(false);
+        if (wrkXboxController != null) {
+            wrkXboxController.setRunning(false);
+        }
         try {
             wrkEtatRobot.join();
+            if (wrkXboxController != null) {
+                wrkXboxController.join();
+            }
         } catch (InterruptedException ex) {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -293,6 +337,101 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, Ctrl {
             } else {
                 WindowManager.afficherAlerte("L'adresse ip du robot est invalide. (" + myRobot.getIp() + ")");
             }
+        }
+    }
+    
+    // ========== Xbox Controller Interface Implementation ==========
+    
+    @Override
+    public void onXboxInputReceived(XboxButton xboxButton) {
+        if (!robot.isConnected() || !xboxControlEnabled) {
+            return;
+        }
+        
+        // Calculate robot speeds based on left stick input
+        // Y-axis: forward/backward, X-axis: turning
+        double forward = -xboxButton.getLeftStickY(); // Inverted because stick Y is negative when up
+        double turn = xboxButton.getLeftStickX();
+        
+        // Tank drive calculation
+        // Left motor = forward - turn
+        // Right motor = forward + turn
+        double leftPower = forward - turn;
+        double rightPower = forward + turn;
+        
+        // Normalize if values exceed 1.0
+        double maxPower = Math.max(Math.abs(leftPower), Math.abs(rightPower));
+        if (maxPower > 1.0) {
+            leftPower /= maxPower;
+            rightPower /= maxPower;
+        }
+        
+        // Convert to robot speed values (-999 to 999)
+        short leftSpeed = (short) (leftPower * MAX_SPEED);
+        short rightSpeed = (short) (rightPower * MAX_SPEED);
+        
+        // Apply speeds to robot
+        robot.setLeftSpeed(leftSpeed);
+        robot.setRightSpeed(rightSpeed);
+        
+        // Head control with D-Pad
+        if (xboxButton.isdPadUp()) {
+            robot.setHeadDirection(RobotState.HeadDirection.UP);
+        } else if (xboxButton.isdPadDown()) {
+            robot.setHeadDirection(RobotState.HeadDirection.DOWN);
+        } else if (!xboxButton.isdPadUp() && !xboxButton.isdPadDown()) {
+            robot.setHeadDirection(RobotState.HeadDirection.NONE);
+        }
+        
+        // Bumpers for dock/undock
+        if (xboxButton.isLeftBumper()) {
+            robot.dock();
+        }
+        if (xboxButton.isRightBumper()) {
+            robot.undock();
+        }
+    }
+    
+    @Override
+    public void onButtonAPressed() {
+        if (robot.isConnected()) {
+            robot.standUp();
+        }
+    }
+    
+    @Override
+    public void onButtonBPressed() {
+        // Toggle LED
+        if (robot.isConnected()) {
+            robot.setLedEnabled(!robot.getRobotState().isLedEnabled());
+        }
+    }
+    
+    @Override
+    public void onButtonXPressed() {
+        // Toggle Xbox control mode
+        xboxControlEnabled = !xboxControlEnabled;
+        Platform.runLater(() -> {
+            if (xboxControlEnabled) {
+                lblHostName.setText(myRobot.getHostname() + " [XBOX MODE]");
+                lblHostName.setStyle("-fx-text-fill: lime;");
+            } else {
+                lblHostName.setText(myRobot.getHostname());
+                lblHostName.setStyle("");
+                // Stop robot when disabling Xbox control
+                robot.setLeftSpeed((short) 0);
+                robot.setRightSpeed((short) 0);
+            }
+        });
+    }
+    
+    @Override
+    public void onButtonYPressed() {
+        // Emergency stop
+        if (robot.isConnected()) {
+            robot.setLeftSpeed((short) 0);
+            robot.setRightSpeed((short) 0);
+            robot.setHeadDirection(RobotState.HeadDirection.NONE);
         }
     }
 
