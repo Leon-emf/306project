@@ -102,11 +102,21 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlX
      * Setup keyboard input as fallback for Xbox controller testing
      */
     private void setupKeyboardInput() {
-        // This will be called when the scene is available
+        // Attach when the scene becomes available, even if it's created after initialize()
+        boxCommands.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+                newScene.addEventHandler(KeyEvent.KEY_RELEASED, this::handleKeyReleased);
+                // Ensure the scene can receive key events (avoid focus trapped in text fields)
+                Platform.runLater(() -> boxCommands.requestFocus());
+            }
+        });
+        // If the scene is already ready, attach immediately
         Platform.runLater(() -> {
             if (boxCommands.getScene() != null) {
-                boxCommands.getScene().setOnKeyPressed(this::handleKeyPressed);
-                boxCommands.getScene().setOnKeyReleased(this::handleKeyReleased);
+                boxCommands.getScene().addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+                boxCommands.getScene().addEventHandler(KeyEvent.KEY_RELEASED, this::handleKeyReleased);
+                boxCommands.requestFocus();
             }
         });
     }
