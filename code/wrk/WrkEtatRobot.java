@@ -23,11 +23,25 @@ public class WrkEtatRobot extends Thread {
 
     private boolean lastConnected;
     private int lastBattery = -1; // Pour éviter les mises à jour inutiles
+    
+    // Auto-reconnexion
+    private boolean autoReconnectEnabled = true;
+    private int disconnectCount = 0;
+    private long lastDisconnectTime = 0;
+    private static final int MAX_RECONNECT_ATTEMPTS = 3;
+    private static final long RECONNECT_COOLDOWN_MS = 5000; // 5 secondes entre les tentatives
+    private String lastIp = null;
+    private int lastId = 0;
+    private int lastPw = 0;
 
     // Intervalle de polling (ms)
     private static final int POLL_INTERVAL = 200;
     // Intervalle de log (toutes les 25 itérations = 5 secondes)
     private static final int LOG_INTERVAL = 25;
+    
+    // Compteur pour détecter les déconnexions silencieuses
+    private int noDataCount = 0;
+    private static final int MAX_NO_DATA_COUNT = 15; // 3 secondes sans données = déconnexion
 
     public WrkEtatRobot(Robot robot, ICtrlEtatRobot refCtrl) {
         super("Thread Etat Robot");
@@ -49,9 +63,22 @@ public class WrkEtatRobot extends Thread {
             
             // Gérer l'état de connexion
             boolean currentConnected = robot.isConnected();
+            
+            // Détecter changement d'état de connexion
             if (lastConnected != currentConnected) {
                 refCtrl.onConnectionStateReceived(currentConnected);
                 lastConnected = currentConnected;
+                
+                // Si déconnexion détectée, tenter auto-reconnexion
+                if (!currentConnected && autoReconnectEnabled && lastIp != null) {
+                    handleDisconnection();
+                }
+                
+                // Reset compteur si connecté
+                if (currentConnected) {
+                    disconnectCount = 0;
+                    noDataCount = 0;
+                }
             }
             
             // Récupérer les données uniquement si connecté
@@ -75,6 +102,14 @@ public class WrkEtatRobot extends Thread {
                     byte[] image = robot.getLastImage();
                     if (image != null && image.length > 0) {
                         refCtrl.onImageReceived(image);
+                        noDataCount = 0; // Reset compteur si on reçoit des données
+                    } else {
+                        noDataCount++;
+                        // Déconnexion silencieuse détectée
+                        if (noDataCount >= MAX_NO_DATA_COUNT) {
+                            System.out.println("[WrkEtatRobot] Pas de données depuis " + (noDataCount * POLL_INTERVAL / 1000) + "s - connexion instable");
+                            noDataCount = 0;
+                        }
                     }
                     
                     byte[] audio = robot.getLastAudio();
@@ -134,6 +169,77 @@ public class WrkEtatRobot extends Thread {
         } catch (InterruptedException ex) {
             System.err.println("Erreur lors du sleep du thread " + super.getName()
                     + ". \n" + ex.getMessage());
+        }
+    }
+    
+    // ========== Auto-reconnexion ==========
+    
+    /**
+     * Sauvegarde les paramètres de connexion pour l'auto-reconnexion
+     */
+    public void setConnectionParams(String ip, int id, int pw) {
+        this.lastIp = ip;
+        this.lastId = id;
+        this.lastPw = pw;
+    }
+    
+    /**
+     * Active ou désactive l'auto-reconnexion
+     */
+    public void setAutoReconnectEnabled(boolean enabled) {
+        this.autoReconnectEnabled = enabled;
+    }
+    
+    /**
+     * Gère une déconnexion et tente une auto-reconnexion
+     */
+    private void handleDisconnection() {
+        long now = System.currentTimeMillis();
+        
+        // Vérifier le cooldown
+        if (now - lastDisconnectTime < RECONNECT_COOLDOWN_MS) {
+            return;
+        }
+        
+        lastDisconnectTime = now;
+        disconnectCount++;
+        
+        if (disconnectCount <= MAX_RECONNECT_ATTEMPTS) {
+            System.out.println("[WrkEtatRobot] Déconnexion détectée - Tentative de reconnexion " 
+                    + disconnectCount + "/" + MAX_RECONNECT_ATTEMPTS + " dans 3.5s...");
+            
+            // Attendre 3.5 secondes avant de reconnecter (évite les erreurs)
+            _sleep(3500);
+            
+            try {
+                robot.connect(lastIp, lastId, lastPw);
+                if (robot.isConnected()) {
+                    System.out.println("[WrkEtatRobot] ✓ Reconnexion réussie!");
+                    disconnectCount = 0;
+                } else {
+                    System.out.println("[WrkEtatRobot] ✗ Échec de reconnexion");
+                }
+            } catch (Exception e) {
+                System.err.println("[WrkEtatRobot] Erreur reconnexion: " + e.getMessage());
+            }
+        } else {
+            System.out.println("[WrkEtatRobot] Nombre max de tentatives atteint (" 
+                    + MAX_RECONNECT_ATTEMPTS + ") - Arrêt auto-reconnexion");
+            // Reset après un délai plus long
+            if (now - lastDisconnectTime > 30000) { // 30 secondes
+                disconnectCount = 0;
+            }
+        }
+    }
+    
+    /**
+     * Force une reconnexion immédiate
+     */
+    public void forceReconnect() {
+        if (lastIp != null) {
+            disconnectCount = 0;
+            lastDisconnectTime = 0;
+            handleDisconnection();
         }
     }
 }

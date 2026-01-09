@@ -428,9 +428,14 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlX
                 try {
                     String ip = getIP();
                     if (ip != null) {
+                        // Sauvegarder les paramètres pour l'auto-reconnexion
+                        wrkEtatRobot.setConnectionParams(ip, myRobot.getId(), myRobot.getPw());
+                        
                         robot.connect(ip, myRobot.getId(), myRobot.getPw());
                         if (!robot.isConnected()) {
                             WindowManager.afficherErreur(robot.getLastError());
+                        } else {
+                            System.out.println("[CONNEXION] ✓ Connecté à " + ip);
                         }
                     }
                 } catch (UnreachableRobotException ex) {
@@ -709,6 +714,33 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlX
             } else {
                 startRecording();
                 System.out.println("[XBOX] Recording STARTED");
+            }
+        });
+    }
+    
+    @Override
+    public void onGuidePressed() {
+        // Toggle connection ON/OFF (bouton Xbox ID 10)
+        System.out.println("[XBOX] Guide button pressed - Toggle Connection");
+        Platform.runLater(() -> {
+            if (robot.isConnected()) {
+                robot.disconnect();
+                System.out.println("[XBOX] Disconnected");
+                WrkXboxVibration.vibrateLight(0);
+            } else {
+                // Délai de 3.5 secondes avant reconnexion pour éviter les erreurs
+                System.out.println("[XBOX] Connecting in 3.5s...");
+                WrkXboxVibration.vibrateMedium(0);
+                loader.setVisible(true);
+                
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(3500); // Délai de 3.5 secondes
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    Platform.runLater(() -> connect());
+                }).start();
             }
         });
     }

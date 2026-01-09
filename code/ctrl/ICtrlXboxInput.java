@@ -39,4 +39,9 @@ public interface ICtrlXboxInput {
      * Called when Start button is pressed (toggle recording)
      */
     void onStartPressed();
+    
+    /**
+     * Called when Guide/Xbox button is pressed (ID 10 - toggle connection)
+     */
+    void onGuidePressed();
 }

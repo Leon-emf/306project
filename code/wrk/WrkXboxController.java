@@ -232,6 +232,7 @@ public class WrkXboxController extends Thread {
                         case "7": xboxButton.setStart(pressed); break;
                         case "8": xboxButton.setLeftStickButton(pressed); break;
                         case "9": xboxButton.setRightStickButton(pressed); break;
+                        case "10": xboxButton.setGuideButton(pressed); break; // Bouton Xbox/Guide
                         default:
                             // Fallback to name matching for non-standard controllers
                             if (name.equals("a") || name.equals("button a")) {
@@ -445,6 +446,12 @@ public class WrkXboxController extends Thread {
             anyButtonPressed = true;
         }
         
+        // Guide/Xbox button for connection toggle (ID 10)
+        if (xboxButton.isGuideButton() && !previousState.isGuideButton()) {
+            refCtrl.onGuidePressed();
+            anyButtonPressed = true;
+        }
+        
         // Light vibration feedback on any button press
         if (anyButtonPressed) {
             WrkXboxVibration.vibrateLight(0);
@@ -471,6 +478,7 @@ public class WrkXboxController extends Thread {
         dest.setStart(source.isStart());
         dest.setLeftStickButton(source.isLeftStickButton());
         dest.setRightStickButton(source.isRightStickButton());
+        dest.setGuideButton(source.isGuideButton());
         dest.setdPadUp(source.isdPadUp());
         dest.setdPadDown(source.isdPadDown());
         dest.setdPadLeft(source.isdPadLeft());

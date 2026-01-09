@@ -18,6 +18,7 @@ public class XboxButton {
     private boolean start;
     private boolean leftStickButton;
     private boolean rightStickButton;
+    private boolean guideButton; // Bouton Xbox (ID 10)
     private boolean dPadUp;
     private boolean dPadDown;
     private boolean dPadLeft;
@@ -49,6 +50,7 @@ public class XboxButton {
         start = false;
         leftStickButton = false;
         rightStickButton = false;
+        guideButton = false;
         dPadUp = false;
         dPadDown = false;
         dPadLeft = false;
@@ -221,6 +223,14 @@ public class XboxButton {
     
     public void setRightTrigger(double rightTrigger) {
         this.rightTrigger = rightTrigger;
+    }
+    
+    public boolean isGuideButton() {
+        return guideButton;
+    }
+    
+    public void setGuideButton(boolean guideButton) {
+        this.guideButton = guideButton;
     }
     
     /**
