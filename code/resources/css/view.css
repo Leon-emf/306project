@@ -211,25 +211,44 @@
 
 /* === Modern List View === */
 .list-view {
-    -fx-background-color: rgba(31, 41, 55, 0.8);
+    -fx-background-color: #1f2937;
     -fx-background-radius: 8px;
     -fx-border-radius: 8px;
-    -fx-border-color: rgba(75, 85, 99, 0.4);
+    -fx-border-color: #4b5563;
+    -fx-border-width: 1px;
+    -fx-min-height: 100px;
+    -fx-pref-height: 150px;
+    -fx-padding: 4px;
+}
+
+.list-view .virtual-flow .clipped-container .sheet .list-cell {
+    -fx-background-color: transparent;
+}
+
+.list-view .virtual-flow .corner {
+    -fx-background-color: transparent;
 }
 
 .list-cell {
     -fx-background-color: transparent;
-    -fx-padding: 10px 12px;
+    -fx-padding: 8px 12px;
+    -fx-text-fill: #e5e7eb;
+}
+
+.list-cell:filled {
+    -fx-background-color: #374151;
+    -fx-background-radius: 4px;
+    -fx-background-insets: 2px;
 }
 
 .list-cell:filled:selected {
-    -fx-background-color: rgba(59, 130, 246, 0.25);
-    -fx-background-radius: 6px;
+    -fx-background-color: #3b82f6;
+    -fx-background-radius: 4px;
 }
 
-.list-cell:hover {
-    -fx-background-color: rgba(55, 65, 81, 0.5);
-    -fx-background-radius: 6px;
+.list-cell:filled:hover {
+    -fx-background-color: #4b5563;
+    -fx-background-radius: 4px;
 }
 
 /* === Modern Tab Pane === */

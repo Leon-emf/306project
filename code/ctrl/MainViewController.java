@@ -62,8 +62,6 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlX
     @FXML
     private TextField txtIp4;
     @FXML
-    private HBox boxCommands;
-    @FXML
     private ImageView imgView;
     @FXML
     private ProgressIndicator loader;
@@ -77,6 +75,8 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlX
     private Label lblHostName;
     @FXML
     private Label lblBatterieRover;
+    @FXML
+    private Label lblQualiteStreaming;
     @FXML
     private Label lblBatterieManette;
     @FXML
@@ -176,15 +176,15 @@ public class MainViewController implements Initializable, ICtrlEtatRobot, ICtrlX
      */
     private void setupKeyboardInput() {
         // Attach when the scene becomes available, even if it's created after initialize()
-        boxCommands.sceneProperty().addListener((obs, oldScene, newScene) -> {
+        imgView.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 attachKeyboardFilters(newScene);
             }
         });
         // If the scene is already ready, attach immediately
         Platform.runLater(() -> {
-            if (boxCommands.getScene() != null) {
-                attachKeyboardFilters(boxCommands.getScene());
+            if (imgView.getScene() != null) {
+                attachKeyboardFilters(imgView.getScene());
             }
             // Click on image to regain focus for keyboard control
             imgView.setOnMouseClicked(e -> {
